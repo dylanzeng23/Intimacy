@@ -21,7 +21,7 @@ const tabBar = document.getElementById('tab-bar');
 const tabs = document.querySelectorAll('.tab');
 
 let currentRoute = '', currentDayContext = null, isAuthed = false;
-let coverDismissed = !!sessionStorage.getItem('cover_seen');
+let coverDismissed = false; // always show cover on page load
 let welcomeShown = !!localStorage.getItem('welcome_seen');
 
 export function navigate(route) { window.location.hash = route; }
@@ -59,7 +59,7 @@ function updateTabLabels() {
 async function route() {
   if (!coverDismissed) {
     setFullscreen();
-    renderCover(app, () => { coverDismissed = true; sessionStorage.setItem('cover_seen', '1'); route(); });
+    renderCover(app, () => { coverDismissed = true; route(); });
     return;
   }
   if (!isAuthed) { setAuthScreen(); renderAuth(app, () => {}); return; }
