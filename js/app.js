@@ -6,6 +6,7 @@ import { renderSettings } from './settings.js';
 import { getSetting } from './db.js';
 import { todayString } from './utils.js';
 import { getUser, onAuthChange, renderAuth } from './auth.js';
+import { renderCover } from './cover.js';
 import { renderLanding } from './landing.js';
 import { renderQuickLog } from './quick-log.js';
 
@@ -21,7 +22,8 @@ const tabs = document.querySelectorAll('.tab');
 let currentRoute = '';
 let currentDayContext = null;
 let isAuthed = false;
-let landingDismissed = !!sessionStorage.getItem('landing_seen');
+let coverDismissed = !!sessionStorage.getItem('cover_seen');
+let welcomeShown = !!localStorage.getItem('welcome_seen');
 
 export function navigate(route) {
   window.location.hash = route;
@@ -44,45 +46,68 @@ function setActiveTab(tabName) {
   tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
 }
 
-function showFullChrome(show) {
-  headerEl.style.display = show ? '' : 'none';
-  tabBar.style.display = show ? '' : 'none';
+function setFullscreen() {
+  headerEl.style.display = 'none';
+  tabBar.style.display = 'none';
   fab.classList.add('hidden');
+  app.style.top = '0';
+  app.style.bottom = '0';
+  app.style.padding = '0';
+  app.style.overflow = 'hidden';
+}
+
+function setAuthScreen() {
+  headerEl.style.display = 'none';
+  tabBar.style.display = 'none';
+  fab.classList.add('hidden');
+  app.style.top = '0';
+  app.style.bottom = '0';
+  app.style.padding = '16px';
+  app.style.overflow = 'auto';
+}
+
+function setAppScreen() {
+  headerEl.style.display = '';
+  tabBar.style.display = '';
+  fab.classList.add('hidden');
+  app.style.top = '';
+  app.style.bottom = '';
+  app.style.padding = '';
+  app.style.overflow = '';
 }
 
 async function route() {
-  // Landing page — show on fresh visit
-  if (!landingDismissed) {
-    showFullChrome(false);
-    app.style.top = '0';
-    app.style.bottom = '0';
-    app.style.padding = '0';
-    app.style.overflow = 'hidden';
-    renderLanding(app, () => {
-      landingDismissed = true;
-      sessionStorage.setItem('landing_seen', '1');
+  // Step 1: Cover page (pre-auth, every session)
+  if (!coverDismissed) {
+    setFullscreen();
+    renderCover(app, () => {
+      coverDismissed = true;
+      sessionStorage.setItem('cover_seen', '1');
       route();
     });
     return;
   }
 
-  // Auth screen
+  // Step 2: Auth screen
   if (!isAuthed) {
-    showFullChrome(false);
-    app.style.top = '0';
-    app.style.bottom = '0';
-    app.style.padding = '16px';
-    app.style.overflow = 'auto';
+    setAuthScreen();
     renderAuth(app, () => {});
     return;
   }
 
-  // Authenticated — show full app
-  showFullChrome(true);
-  app.style.top = '';
-  app.style.bottom = '';
-  app.style.padding = '';
-  app.style.overflow = '';
+  // Step 3: Welcome intro (post-auth, first time only)
+  if (!welcomeShown) {
+    setFullscreen();
+    renderLanding(app, () => {
+      welcomeShown = true;
+      localStorage.setItem('welcome_seen', '1');
+      route();
+    });
+    return;
+  }
+
+  // Step 4: Main app
+  setAppScreen();
 
   const hash = window.location.hash.slice(1) || 'log';
   currentRoute = hash;

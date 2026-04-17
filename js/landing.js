@@ -3,13 +3,13 @@ export function renderLanding(container, onEnter) {
     <div class="landing">
       <div class="landing-content">
         <span class="landing-icon">&#127769;</span>
-        <div class="landing-pretitle">Your Private Journal</div>
-        <h1 class="landing-title">Daily Log</h1>
+        <div class="landing-pretitle">Welcome</div>
+        <h1 class="landing-title">Here's what<br>you can do</h1>
         <p class="landing-desc">
           Track your <em>intimate moments</em> with zero judgment.<br>
           Solo sessions, partner adventures, or anything in between &mdash;
           log it, see patterns, and understand your rhythm.<br><br>
-          Your body, your data, your eyes only.
+          Streaks, stats, and a "No Nut" counter. You're welcome.
         </p>
         <div class="landing-features">
           <div class="landing-feat">
@@ -29,9 +29,9 @@ export function renderLanding(container, onEnter) {
             <span class="landing-feat-label">Streaks</span>
           </div>
         </div>
-        <button class="landing-cta" id="landing-enter">Get Started &#8594;</button>
+        <button class="landing-cta" id="landing-enter">Let's Go &#8594;</button>
       </div>
-      <div class="landing-footer">All data encrypted &middot; Nothing leaves your device</div>
+      <div class="landing-footer">This only shows once &middot; You're all set</div>
     </div>
   `;
 

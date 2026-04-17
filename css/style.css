@@ -82,7 +82,99 @@ html, body {
     var(--bg);
 }
 
-/* ==================== LANDING PAGE ==================== */
+/* ==================== COVER PAGE (pre-auth) ==================== */
+.cover {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  background: #040810;
+}
+
+.cover-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 100% 80% at 50% 30%, rgba(40, 80, 200, 0.30) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 20% 70%, rgba(100, 50, 200, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 45% at 80% 80%, rgba(200, 80, 140, 0.10) 0%, transparent 45%);
+  animation: coverGlow 8s ease-in-out infinite alternate;
+}
+
+@keyframes coverGlow {
+  0% { opacity: 0.7; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.05); }
+}
+
+.cover-content {
+  position: relative;
+  z-index: 1;
+  animation: fadeUp 1s ease-out;
+}
+
+.cover-icon {
+  font-size: 72px;
+  margin-bottom: 20px;
+  display: block;
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.cover-title {
+  font-size: 52px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -2px;
+  margin-bottom: 12px;
+}
+
+.cover-tagline {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-bottom: 48px;
+}
+
+.cover-cta {
+  padding: 16px 52px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.25s;
+}
+
+.cover-cta:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(40, 80, 200, 0.25);
+}
+
+.cover-cta:active { transform: scale(0.97); }
+
+.cover-footer {
+  position: absolute;
+  bottom: 36px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 1px;
+  font-weight: 500;
+  z-index: 1;
+}
+
+/* ==================== LANDING PAGE (post-auth welcome) ==================== */
 .landing {
   position: fixed;
   inset: 0;
