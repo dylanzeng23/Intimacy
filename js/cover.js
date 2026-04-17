@@ -1,3 +1,5 @@
+import { t } from './i18n.js';
+
 export function renderCover(container, onEnter) {
   container.innerHTML = `
     <div class="cover">
@@ -5,12 +7,11 @@ export function renderCover(container, onEnter) {
       <div class="cover-content">
         <div class="cover-icon">&#127769;</div>
         <div class="cover-title">Daily Log</div>
-        <div class="cover-tagline">Your body. Your data. Your eyes only.</div>
-        <button class="cover-cta" id="cover-enter">Sign In</button>
+        <div class="cover-tagline">${t('coverTagline')}</div>
+        <button class="cover-cta" id="cover-enter">${t('coverCta')}</button>
       </div>
-      <div class="cover-footer">Private &middot; Encrypted &middot; No tracking</div>
+      <div class="cover-footer">${t('coverFooter')}</div>
     </div>
   `;
-
   document.getElementById('cover-enter').addEventListener('click', onEnter);
 }
