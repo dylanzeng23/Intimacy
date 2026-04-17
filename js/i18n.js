@@ -175,7 +175,7 @@ const strings = {
     logSubmit: '记录',
     logDayStreak: '天连续',
     logBestStreak: '最长连续',
-    logNoNut: '禁撸',
+    logNoNut: '禁欲',
     logToday: '今天！',
 
     calendarTitle: '日历',

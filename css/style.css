@@ -608,18 +608,23 @@ html, body {
 /* Entry indicator dots inside cells */
 .mini-dots {
   position: absolute;
-  bottom: 2px;
+  bottom: 3px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 2px;
+  gap: 3px;
 }
 
 .mini-dot {
-  width: 4px;
-  height: 4px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   display: block;
+  box-shadow: 0 0 3px currentColor;
+}
+
+[data-theme="light"] .mini-dot {
+  box-shadow: 0 0 4px rgba(0,0,0,0.2);
 }
 
 .mini-cell {
