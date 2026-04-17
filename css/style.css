@@ -584,6 +584,27 @@ html, body {
   color: #e0c8e8;
 }
 
+/* Entry indicator dots inside cells */
+.mini-dots {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2px;
+}
+
+.mini-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  display: block;
+}
+
+.mini-cell {
+  position: relative;
+}
+
 /* Legend — bottom bar */
 .calendar-legend {
   display: flex;

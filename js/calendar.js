@@ -47,8 +47,10 @@ export async function renderCalendar(container) {
     for (let j = 0; j < fd; j++) html += `<div class="mini-cell empty"></div>`;
     for (let day = 1; day <= dims; day++) {
       const ds = `${y}-${ms}-${String(day).padStart(2,'0')}`;
-      const cls = getCellClass(entryMap[ds]);
-      html += `<button class="mini-cell${ds===today?' today':''} ${cls}" data-date="${ds}">${day}</button>`;
+      const dayEntries = entryMap[ds] || [];
+      const cls = getCellClass(dayEntries);
+      const dots = dayEntries.length > 0 ? `<span class="mini-dots">${dayEntries.slice(0,4).map(e => `<span class="mini-dot" style="background:${TYPE_COLORS[e.type]||TYPE_COLORS.other}"></span>`).join('')}</span>` : '';
+      html += `<button class="mini-cell${ds===today?' today':''} ${cls}" data-date="${ds}">${day}${dots}</button>`;
     }
     const rem = (fd+dims)%7; for (let j = 0; j < (rem?7-rem:0); j++) html += `<div class="mini-cell empty"></div>`;
     html += `</div></div>`;
