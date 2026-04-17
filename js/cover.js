@@ -1,14 +1,27 @@
 import { t } from './i18n.js';
+import { getSetting } from './db.js';
 
-export function renderCover(container, onEnter) {
+export async function renderCover(container, onEnter) {
+  const theme = await getSetting('theme') || 'light';
+  const icon = theme === 'dark' ? '&#127769;' : '&#9728;&#65039;';
+
   container.innerHTML = `
     <div class="cover">
       <div class="cover-bg"></div>
       <div class="cover-content">
-        <div class="cover-icon">&#127769;</div>
+        <div class="cover-icon">${icon}</div>
         <div class="cover-title">Daily Log</div>
         <div class="cover-tagline">${t('coverTagline')}</div>
-        <button class="cover-cta" id="cover-enter">${t('coverCta')}</button>
+        <div class="cover-features">
+          <div class="cover-feat">${t('landingCalendar')}</div>
+          <div class="cover-feat-dot">&middot;</div>
+          <div class="cover-feat">${t('landingPatterns')}</div>
+          <div class="cover-feat-dot">&middot;</div>
+          <div class="cover-feat">${t('landingStreaks')}</div>
+          <div class="cover-feat-dot">&middot;</div>
+          <div class="cover-feat">${t('landingPrivate')}</div>
+        </div>
+        <button class="cover-cta" id="cover-enter">${t('landingCta')}</button>
       </div>
       <div class="cover-footer">${t('coverFooter')}</div>
     </div>

@@ -59,7 +59,7 @@ function updateTabLabels() {
 async function route() {
   if (!coverDismissed) {
     setFullscreen();
-    renderCover(app, () => { coverDismissed = true; route(); });
+    await renderCover(app, () => { coverDismissed = true; route(); });
     return;
   }
   if (!isAuthed) { setAuthScreen(); renderAuth(app, () => {}); return; }
@@ -115,8 +115,8 @@ headerBack.addEventListener('click', () => {
 tabs.forEach(tab => tab.addEventListener('click', () => navigate(tab.dataset.tab)));
 
 async function init() {
-  const theme = await getSetting('theme');
-  if (theme) document.documentElement.setAttribute('data-theme', theme);
+  const theme = await getSetting('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', theme);
   initCalendar();
   const user = await getUser();
   isAuthed = !!user;
