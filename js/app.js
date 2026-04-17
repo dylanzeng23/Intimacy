@@ -22,7 +22,7 @@ const tabs = document.querySelectorAll('.tab');
 
 let currentRoute = '', currentDayContext = null, isAuthed = false;
 let coverDismissed = false; // always show cover on page load
-let welcomeShown = !!localStorage.getItem('welcome_seen');
+let welcomeShown = false;
 
 export function navigate(route) { window.location.hash = route; }
 
@@ -65,7 +65,7 @@ async function route() {
   if (!isAuthed) { setAuthScreen(); renderAuth(app, () => {}); return; }
   if (!welcomeShown) {
     setFullscreen();
-    renderLanding(app, () => { welcomeShown = true; localStorage.setItem('welcome_seen', '1'); route(); });
+    renderLanding(app, () => { welcomeShown = true; route(); });
     return;
   }
 
