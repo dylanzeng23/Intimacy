@@ -78,7 +78,7 @@ export async function renderQuickLog(container, presetDate = null) {
         <div class="streak-divider"></div>
         <div class="streak-item">
           <div class="streak-icon">${streaks.noNut > 0 ? '&#128170;' : '&#128064;'}</div>
-          <div class="streak-info"><div class="streak-count">${streaks.noNut}</div><div class="streak-label">${streaks.noNut > 0 ? t('logNoNut') : t('logToday')}</div></div>
+          <div class="streak-info"><div class="streak-count">${streaks.noNut}</div><div class="streak-label">${t('logNoNut')}</div></div>
         </div>
       </div>
       <form id="qlog-form" class="qlog-form">
