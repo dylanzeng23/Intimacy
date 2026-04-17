@@ -59,7 +59,7 @@ function updateTabLabels() {
 async function route() {
   if (!coverDismissed) {
     setFullscreen();
-    await renderCover(app, () => { coverDismissed = true; route(); });
+    renderCover(app, () => { coverDismissed = true; route(); });
     return;
   }
   if (!isAuthed) { setAuthScreen(); renderAuth(app, () => {}); return; }

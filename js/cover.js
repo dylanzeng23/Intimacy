@@ -1,9 +1,8 @@
 import { t } from './i18n.js';
-import { getSetting } from './db.js';
 
-export async function renderCover(container, onEnter) {
-  const theme = await getSetting('theme') || 'light';
-  const icon = theme === 'dark' ? '&#127769;' : '&#9728;&#65039;';
+export function renderCover(container, onEnter) {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const icon = isDark ? '&#127769;' : '&#9728;&#65039;';
 
   container.innerHTML = `
     <div class="cover">
