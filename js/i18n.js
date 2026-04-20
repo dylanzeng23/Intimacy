@@ -125,6 +125,18 @@ const strings = {
     navEditEntry: 'Edit Entry',
     navEntry: 'Entry',
 
+    // Drink
+    catSex: 'Sex',
+    catDrink: 'Drink',
+    drinkBeer: 'Beer',
+    drinkWine: 'Wine',
+    drinkSpirits: 'Spirits',
+    drinkCocktail: 'Cocktail',
+    calDrink: 'Drink',
+    statsDrinkWeek: 'Drinks This Week',
+    statsDrinkMonth: 'Drinks This Month',
+    statsByDrinkType: 'By Drink Type',
+
     // Day names
     daySun: 'S', dayMon: 'M', dayTue: 'T', dayWed: 'W', dayThu: 'T', dayFri: 'F', daySat: 'S',
   },
@@ -245,6 +257,17 @@ const strings = {
     navEditEntry: '编辑记录',
     navEntry: '记录详情',
 
+    catSex: '性事',
+    catDrink: '喝酒',
+    drinkBeer: '啤酒',
+    drinkWine: '红酒',
+    drinkSpirits: '烈酒',
+    drinkCocktail: '鸡尾酒',
+    calDrink: '喝酒',
+    statsDrinkWeek: '本周饮酒',
+    statsDrinkMonth: '本月饮酒',
+    statsByDrinkType: '按酒类',
+
     daySun: '日', dayMon: '一', dayTue: '二', dayWed: '三', dayThu: '四', dayFri: '五', daySat: '六',
   }
 };
@@ -265,6 +288,13 @@ export function setLang(lang) {
 }
 
 export function getTypeLabel(type) {
-  const map = { partner: 'logPartner', solo: 'logSolo', other: 'logOther' };
-  return t(map[type] || 'logOther');
+  const map = {
+    partner: 'logPartner', solo: 'logSolo', other: 'logOther',
+    beer: 'drinkBeer', wine: 'drinkWine', spirits: 'drinkSpirits', cocktail: 'drinkCocktail',
+  };
+  return t(map[type] || type);
+}
+
+export function getCategoryLabel(cat) {
+  return t(cat === 'drink' ? 'catDrink' : 'catSex');
 }

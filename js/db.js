@@ -10,6 +10,7 @@ export async function addEntry(entry) {
     .from('entries')
     .insert({
       user_id,
+      category: entry.category || 'sex',
       date: entry.date,
       time: entry.time,
       type: entry.type,
@@ -37,6 +38,7 @@ export async function updateEntry(entry) {
   const { data, error } = await supabase
     .from('entries')
     .update({
+      category: entry.category || 'sex',
       date: entry.date,
       time: entry.time,
       type: entry.type,
@@ -103,6 +105,7 @@ export async function clearAllEntries() {
 function mapEntry(row) {
   return {
     id: row.id,
+    category: row.category || 'sex',
     date: row.date,
     time: row.time,
     type: row.type,

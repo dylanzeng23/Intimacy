@@ -17,30 +17,17 @@ export function toDateString(date) {
   return `${y}-${m}-${d}`;
 }
 
-export function todayString() {
-  return toDateString(new Date());
-}
+export function todayString() { return toDateString(new Date()); }
 
 export function nowTimeString() {
   const now = new Date();
   return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 }
 
-export function getMonthName(month) {
-  return MONTH_NAMES[month];
-}
-
-export function getDayNames() {
-  return DAY_NAMES;
-}
-
-export function getDaysInMonth(year, month) {
-  return new Date(year, month + 1, 0).getDate();
-}
-
-export function getFirstDayOfMonth(year, month) {
-  return new Date(year, month, 1).getDay();
-}
+export function getMonthName(month) { return MONTH_NAMES[month]; }
+export function getDayNames() { return DAY_NAMES; }
+export function getDaysInMonth(year, month) { return new Date(year, month + 1, 0).getDate(); }
+export function getFirstDayOfMonth(year, month) { return new Date(year, month, 1).getDay(); }
 
 export function formatTime12h(timeStr) {
   const [h, m] = timeStr.split(':').map(Number);
@@ -57,16 +44,28 @@ export function getTimeOfDay(timeStr) {
   return 'Evening';
 }
 
-export const TYPE_LABELS = {
-  partner: 'Partner',
-  solo: 'Solo',
-  other: 'Other',
-};
-
-export const TYPE_COLORS = {
+// Sex types
+export const SEX_TYPE_COLORS = {
   partner: '#f08aaa',
   solo: '#b8a0f0',
   other: '#60d0a0',
+};
+
+// Drink types
+export const DRINK_TYPE_COLORS = {
+  beer: '#e0a030',
+  wine: '#c05070',
+  spirits: '#d08840',
+  cocktail: '#60b0d0',
+};
+
+// Combined — used for dot colors
+export const TYPE_COLORS = { ...SEX_TYPE_COLORS, ...DRINK_TYPE_COLORS };
+
+// Category colors for calendar fills
+export const CATEGORY_COLORS = {
+  sex: '#b8a0f0',
+  drink: '#e0a030',
 };
 
 export const MOOD_EMOJIS = ['', '😐', '🙂', '😊', '😄', '🤩'];

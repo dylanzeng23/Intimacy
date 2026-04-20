@@ -22,6 +22,12 @@ function dayNames() {
 
 function getCellClass(entries) {
   if (!entries || entries.length === 0) return '';
+  const cats = new Set(entries.map(e => e.category || 'sex'));
+  const hasSex = cats.has('sex');
+  const hasDrink = cats.has('drink');
+  if (hasSex && hasDrink) return 'has-mixed-cat';
+  if (hasDrink) return 'has-drink';
+  // Sex only — check subtypes
   const types = new Set(entries.map(e => e.type));
   if (types.size > 1) return 'has-mixed';
   if (types.has('partner')) return 'has-partner';
@@ -56,7 +62,7 @@ export async function renderCalendar(container) {
     html += `</div></div>`;
     m++; if (m > 11) { m = 0; y++; }
   }
-  html += `</div><div class="calendar-legend"><div class="legend-item"><div class="legend-dot" style="background:var(--partner)"></div>${t('calPartner')}</div><div class="legend-item"><div class="legend-dot" style="background:var(--solo)"></div>${t('calSolo')}</div><div class="legend-item"><div class="legend-dot" style="background:var(--other)"></div>${t('calOther')}</div></div>`;
+  html += `</div><div class="calendar-legend"><div class="legend-item"><div class="legend-dot" style="background:var(--partner)"></div>${t('calPartner')}</div><div class="legend-item"><div class="legend-dot" style="background:var(--solo)"></div>${t('calSolo')}</div><div class="legend-item"><div class="legend-dot" style="background:var(--other)"></div>${t('calOther')}</div><div class="legend-item"><div class="legend-dot" style="background:var(--drink)"></div>${t('calDrink')}</div></div>`;
   container.innerHTML = html;
   document.getElementById('cal-prev').addEventListener('click', () => { startMonth -= MONTHS_TO_SHOW; while (startMonth < 0) { startMonth += 12; startYear--; } renderCalendar(container); });
   document.getElementById('cal-next').addEventListener('click', () => { startMonth += MONTHS_TO_SHOW; while (startMonth > 11) { startMonth -= 12; startYear++; } renderCalendar(container); });
@@ -73,8 +79,9 @@ export async function renderDayView(container, dateStr) {
     html += `<div class="day-empty"><p>${t('dayNoEntries')}</p><p>${t('dayTapAdd')}</p></div>`;
   } else {
     for (const entry of entries.sort((a,b) => a.time.localeCompare(b.time))) {
-      const color = TYPE_COLORS[entry.type] || TYPE_COLORS.other;
-      const meta = [getTypeLabel(entry.type)];
+      const color = TYPE_COLORS[entry.type] || '#888';
+      const catIcon = (entry.category || 'sex') === 'drink' ? '🍷 ' : '';
+      const meta = [catIcon + getTypeLabel(entry.type)];
       if (entry.notes) meta.push(entry.notes.substring(0, 50));
       html += `<div class="entry-card" data-id="${entry.id}"><div class="entry-type-dot" style="background:${color}"></div><div class="entry-card-info"><div class="entry-card-time">${formatTime12h(entry.time)}</div><div class="entry-card-meta">${meta.join(' · ')}</div></div><div class="entry-card-arrow">&#8250;</div></div>`;
     }

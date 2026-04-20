@@ -19,6 +19,9 @@
   --solo-fill: rgba(184, 160, 240, 0.28);
   --other: #60d0a0;
   --other-fill: rgba(96, 208, 160, 0.28);
+  --drink-fill: rgba(224, 160, 48, 0.28);
+  --drink: #e0a030;
+  --drink-fill: rgba(224, 160, 48, 0.28);
   --danger: #e05068;
   --header-bg: rgba(8, 12, 28, 0.65);
   --header-border: rgba(91, 138, 245, 0.08);
@@ -40,6 +43,7 @@
   --partner-fill: rgba(220, 60, 110, 0.38);
   --solo-fill: rgba(120, 80, 220, 0.32);
   --other-fill: rgba(30, 160, 90, 0.35);
+  --drink-fill: rgba(200, 140, 20, 0.35);
   --header-bg: rgba(210, 220, 240, 0.55);
   --header-border: rgba(91, 138, 245, 0.10);
   --tab-bg: rgba(210, 220, 240, 0.6);
@@ -605,6 +609,22 @@ html, body {
   color: #e0c8e8;
 }
 
+.mini-cell.has-drink {
+  background: var(--drink-fill);
+  color: #f0d080;
+}
+.mini-cell.has-drink:hover {
+  background: rgba(224, 160, 48, 0.42);
+}
+
+.mini-cell.has-mixed-cat {
+  background: linear-gradient(135deg, var(--solo-fill), var(--drink-fill));
+  color: #d8c8e0;
+}
+
+[data-theme="light"] .mini-cell.has-drink { color: #6a4a10; }
+[data-theme="light"] .mini-cell.has-mixed-cat { color: #4a3060; }
+
 /* Entry indicator dots inside cells */
 .mini-dots {
   position: absolute;
@@ -1080,6 +1100,35 @@ textarea.form-input { min-height: 100px; resize: vertical; }
 .qlog-submit {
   margin-top: 8px;
 }
+
+/* Category toggle */
+.qlog-cat-toggle {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.qlog-cat-btn {
+  padding: 10px 28px;
+  border-radius: 50px;
+  background: var(--bg-elevated);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.qlog-cat-btn.active {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+  color: var(--text-bright);
+}
+
+.qlog-cat-btn:hover { background: #1a2545; }
+[data-theme="light"] .qlog-cat-btn:hover { background: rgba(91,138,245,0.08); }
 
 /* Streak bar */
 .streak-bar {
