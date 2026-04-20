@@ -90,6 +90,9 @@ async function renderLogForm(container, category, presetDate) {
   const isSex = category === 'sex';
   const types = Object.entries(SEX_TYPE_COLORS);
 
+  const DRUNK_EMOJIS = ['', '😌', '😊', '🥴', '🤪', '💀'];
+  const drinkOptions = ['drinkBeer','drinkWine','drinkSpirits','drinkCocktail','drinkSake','drinkSoju'];
+
   container.innerHTML = `
     <div class="qlog">
       <div class="qlog-greeting">${greeting}</div>
@@ -102,7 +105,19 @@ async function renderLogForm(container, category, presetDate) {
           <div class="qlog-types" id="f-type">
             ${types.map(([key, color]) => `<button type="button" class="qlog-type-btn${key === 'solo' ? ' active' : ''}" data-type="${key}"><span class="qlog-type-dot" style="background:${color}"></span>${getTypeLabel(key)}</button>`).join('')}
           </div>
-        </div>` : ''}
+        </div>` : `
+        <div class="qlog-section">
+          <div class="form-label">${t('drinkTypes')}</div>
+          <div class="qlog-drink-tags">
+            ${drinkOptions.map(k => `<button type="button" class="qlog-drink-tag" data-drink="${k}">${t(k)}</button>`).join('')}
+          </div>
+        </div>
+        <div class="qlog-section">
+          <div class="form-label">${t('drunkLevel')}</div>
+          <div class="qlog-drunk-levels">
+            ${[1,2,3,4,5].map(i => `<button type="button" class="qlog-drunk-btn" data-level="${i}"><span class="qlog-drunk-emoji">${DRUNK_EMOJIS[i]}</span><span class="qlog-drunk-label">${t('drunk'+i)}</span></button>`).join('')}
+          </div>
+        </div>`}
 
         <div class="qlog-section"><div class="form-label">${t('logDate')}</div><input type="date" class="form-input" id="f-date" value="${date}"></div>
 
@@ -116,7 +131,7 @@ async function renderLogForm(container, category, presetDate) {
           <div class="qlog-exact-time"><label class="qlog-exact-toggle" id="exact-toggle"><span>${t('logExactTime')}</span><span class="qlog-toggle-arrow" id="toggle-arrow">▾</span></label><input type="time" class="form-input qlog-time-input hidden" id="f-time" value="${nowTimeString()}"></div>
         </div>
 
-        <div class="qlog-section"><div class="form-label">${t('logMood')}</div><div class="qlog-moods">${[1,2,3,4,5].map(i => `<button type="button" class="qlog-mood-btn" data-mood="${i}">${MOOD_EMOJIS[i]}</button>`).join('')}</div></div>
+        ${isSex ? `<div class="qlog-section"><div class="form-label">${t('logMood')}</div><div class="qlog-moods">${[1,2,3,4,5].map(i => `<button type="button" class="qlog-mood-btn" data-mood="${i}">${MOOD_EMOJIS[i]}</button>`).join('')}</div></div>` : ''}
         ${isSex ? `<div class="qlog-section"><div class="form-label">${t('logDuration')}</div><input type="number" class="form-input qlog-duration" id="f-duration" placeholder="${t('logDurationPlaceholder')}" min="0" inputmode="numeric"></div>` : ''}
         <div class="qlog-section"><div class="form-label">${t('logNotes')}</div><textarea class="form-input qlog-notes" id="f-notes" placeholder="${t('logNotesPlaceholder')}"></textarea></div>
         <button type="submit" class="btn btn-primary qlog-submit">${t('logSubmit')}</button>
@@ -125,6 +140,7 @@ async function renderLogForm(container, category, presetDate) {
   `;
 
   let selectedType = isSex ? 'solo' : 'drink', selectedPeriod = currentPeriod, useExactTime = false, selectedMood = 0;
+  let selectedDrinks = [], selectedDrunkLevel = 0;
   const periodToTime = { morning: '09:00', afternoon: '14:00', night: '22:00' };
 
   container.querySelectorAll('.qlog-period-btn').forEach(btn => btn.addEventListener('click', () => {
@@ -141,23 +157,44 @@ async function renderLogForm(container, category, presetDate) {
       container.querySelectorAll('.qlog-type-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active'); selectedType = btn.dataset.type;
     }));
+    container.querySelectorAll('.qlog-mood-btn').forEach(btn => btn.addEventListener('click', () => {
+      const val = parseInt(btn.dataset.mood);
+      if (val === selectedMood) { selectedMood = 0; btn.classList.remove('active'); }
+      else { container.querySelectorAll('.qlog-mood-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); selectedMood = val; }
+    }));
+  } else {
+    // Drink tags — multi-select
+    container.querySelectorAll('.qlog-drink-tag').forEach(btn => btn.addEventListener('click', () => {
+      btn.classList.toggle('active');
+      const d = btn.dataset.drink;
+      if (selectedDrinks.includes(d)) selectedDrinks = selectedDrinks.filter(x => x !== d);
+      else selectedDrinks.push(d);
+    }));
+    // Drunk level — single select
+    container.querySelectorAll('.qlog-drunk-btn').forEach(btn => btn.addEventListener('click', () => {
+      const val = parseInt(btn.dataset.level);
+      if (val === selectedDrunkLevel) { selectedDrunkLevel = 0; btn.classList.remove('active'); }
+      else { container.querySelectorAll('.qlog-drunk-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); selectedDrunkLevel = val; }
+    }));
   }
-  container.querySelectorAll('.qlog-mood-btn').forEach(btn => btn.addEventListener('click', () => {
-    const val = parseInt(btn.dataset.mood);
-    if (val === selectedMood) { selectedMood = 0; btn.classList.remove('active'); }
-    else { container.querySelectorAll('.qlog-mood-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); selectedMood = val; }
-  }));
 
   document.getElementById('qlog-form').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const notes = document.getElementById('f-notes').value.trim();
+    const drinkInfo = !isSex ? [
+      selectedDrinks.length > 0 ? selectedDrinks.map(k => t(k)).join(', ') : '',
+      selectedDrunkLevel > 0 ? t('drunk' + selectedDrunkLevel) : '',
+    ].filter(Boolean).join(' | ') : '';
+    const fullNotes = [drinkInfo, notes].filter(Boolean).join('\n');
+
     const data = {
       category,
       date: document.getElementById('f-date').value,
       time: useExactTime ? document.getElementById('f-time').value : periodToTime[selectedPeriod],
       type: selectedType,
       duration: (isSex && document.getElementById('f-duration')?.value) ? parseInt(document.getElementById('f-duration').value) : null,
-      mood: selectedMood || null,
-      notes: document.getElementById('f-notes').value.trim(),
+      mood: isSex ? (selectedMood || null) : (selectedDrunkLevel || null),
+      notes: fullNotes,
     };
     await addEntry(data);
     navigate(`day/${data.date}`);
