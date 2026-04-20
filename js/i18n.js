@@ -126,12 +126,8 @@ const strings = {
     navEntry: 'Entry',
 
     // Drink
-    catSex: 'Sex',
+    catSex: 'Intimacy',
     catDrink: 'Drink',
-    drinkBeer: 'Beer',
-    drinkWine: 'Wine',
-    drinkSpirits: 'Spirits',
-    drinkCocktail: 'Cocktail',
     calDrink: 'Drink',
     statsDrinkWeek: 'Drinks This Week',
     statsDrinkMonth: 'Drinks This Month',
@@ -257,12 +253,8 @@ const strings = {
     navEditEntry: '编辑记录',
     navEntry: '记录详情',
 
-    catSex: '性事',
+    catSex: '亲密',
     catDrink: '喝酒',
-    drinkBeer: '啤酒',
-    drinkWine: '红酒',
-    drinkSpirits: '烈酒',
-    drinkCocktail: '鸡尾酒',
     calDrink: '喝酒',
     statsDrinkWeek: '本周饮酒',
     statsDrinkMonth: '本月饮酒',
@@ -290,7 +282,7 @@ export function setLang(lang) {
 export function getTypeLabel(type) {
   const map = {
     partner: 'logPartner', solo: 'logSolo', other: 'logOther',
-    beer: 'drinkBeer', wine: 'drinkWine', spirits: 'drinkSpirits', cocktail: 'drinkCocktail',
+    drink: 'catDrink',
   };
   return t(map[type] || type);
 }

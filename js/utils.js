@@ -51,12 +51,9 @@ export const SEX_TYPE_COLORS = {
   other: '#60d0a0',
 };
 
-// Drink types
+// Drink — single type
 export const DRINK_TYPE_COLORS = {
-  beer: '#e0a030',
-  wine: '#c05070',
-  spirits: '#d08840',
-  cocktail: '#60b0d0',
+  drink: '#e0a030',
 };
 
 // Combined — used for dot colors

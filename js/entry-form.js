@@ -1,5 +1,5 @@
 import { addEntry, getEntry, updateEntry, deleteEntry } from './db.js';
-import { todayString, nowTimeString, SEX_TYPE_COLORS, DRINK_TYPE_COLORS, MOOD_EMOJIS } from './utils.js';
+import { todayString, nowTimeString, SEX_TYPE_COLORS, MOOD_EMOJIS } from './utils.js';
 import { navigate } from './app.js';
 import { t, getTypeLabel } from './i18n.js';
 
@@ -13,13 +13,13 @@ export async function renderEntryForm(container, editId = null) {
   const cat = entry?.category || 'sex';
   const date = entry?.date || todayString();
   const time = entry?.time || nowTimeString();
-  const type = entry?.type || (cat === 'sex' ? 'solo' : 'beer');
+  const type = entry?.type || (cat === 'sex' ? 'solo' : 'drink');
   const duration = entry?.duration ?? '';
   const mood = entry?.mood ?? 0;
   const notes = entry?.notes || '';
 
   const sexTypes = Object.entries(SEX_TYPE_COLORS);
-  const drinkTypes = [['beer','🍺'],['wine','🍷'],['spirits','🥃'],['cocktail','🍸']];
+  const isDrink = cat === 'drink';
 
   container.innerHTML = `
     <div class="qlog">
@@ -33,8 +33,7 @@ export async function renderEntryForm(container, editId = null) {
         <div class="qlog-section">
           <div class="form-label">${t('entryType')}</div>
           <div class="qlog-types" id="f-type">
-            ${sexTypes.map(([key, color]) => `<button type="button" class="qlog-type-btn active-cat-sex${cat !== 'sex' ? ' hidden' : ''}${key === type && cat === 'sex' ? ' active' : ''}" data-type="${key}" data-cat="sex"><span class="qlog-type-dot" style="background:${color}"></span>${getTypeLabel(key)}</button>`).join('')}
-            ${drinkTypes.map(([key, emoji]) => `<button type="button" class="qlog-type-btn active-cat-drink${cat !== 'drink' ? ' hidden' : ''}${key === type && cat === 'drink' ? ' active' : ''}" data-type="${key}" data-cat="drink"><span>${emoji}</span>${getTypeLabel(key)}</button>`).join('')}
+            ${isDrink ? '' : sexTypes.map(([key, color]) => `<button type="button" class="qlog-type-btn${key === type ? ' active' : ''}" data-type="${key}"><span class="qlog-type-dot" style="background:${color}"></span>${getTypeLabel(key)}</button>`).join('')}
           </div>
         </div>
         <div class="qlog-section"><div class="form-label">${t('entryDate')}</div><input type="date" class="form-input" id="f-date" value="${date}"></div>
@@ -53,14 +52,13 @@ export async function renderEntryForm(container, editId = null) {
   container.querySelectorAll('.qlog-cat-btn').forEach(btn => btn.addEventListener('click', () => {
     container.querySelectorAll('.qlog-cat-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active'); selectedCat = btn.dataset.cat;
-    container.querySelectorAll('.active-cat-sex').forEach(b => b.classList.toggle('hidden', selectedCat !== 'sex'));
-    container.querySelectorAll('.active-cat-drink').forEach(b => b.classList.toggle('hidden', selectedCat !== 'drink'));
-    selectedType = selectedCat === 'sex' ? 'solo' : 'beer';
-    container.querySelectorAll(`.qlog-type-btn[data-cat="${selectedCat}"]`).forEach((b, i) => b.classList.toggle('active', i === (selectedCat === 'sex' ? 1 : 0)));
+    const typeSection = container.querySelector('.qlog-types');
+    if (typeSection) typeSection.style.display = selectedCat === 'sex' ? '' : 'none';
+    selectedType = selectedCat === 'sex' ? 'solo' : 'drink';
   }));
 
   container.querySelectorAll('.qlog-type-btn').forEach(btn => btn.addEventListener('click', () => {
-    container.querySelectorAll(`.qlog-type-btn[data-cat="${btn.dataset.cat}"]`).forEach(b => b.classList.remove('active'));
+    container.querySelectorAll('.qlog-type-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active'); selectedType = btn.dataset.type;
   }));
 
