@@ -1101,44 +1101,77 @@ textarea.form-input { min-height: 100px; resize: vertical; }
   margin-top: 8px;
 }
 
-/* Category pick cards */
-.qlog-pick {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-top: 8px;
-}
-
-.qlog-pick-card {
+/* Dual-card selection layout */
+.qlog-dual {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   gap: 12px;
-  padding: 32px 16px;
-  border-radius: 16px;
+}
+
+.qlog-dual-card {
   background: var(--bg-elevated);
   border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 18px 20px;
   cursor: pointer;
   transition: all 0.2s;
   font-family: inherit;
 }
 
-.qlog-pick-card:hover {
+.qlog-dual-card:hover {
   border-color: var(--accent);
-  background: var(--accent-glow);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(91, 138, 245, 0.15);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(91, 138, 245, 0.12);
 }
 
-.qlog-pick-card:active { transform: scale(0.97); }
+.qlog-dual-card:active { transform: scale(0.98); }
 
-.qlog-pick-emoji { font-size: 40px; line-height: 1; }
+.qlog-dual-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
 
-.qlog-pick-label {
-  font-size: 16px;
-  font-weight: 700;
+.qlog-dual-emoji { font-size: 28px; line-height: 1; }
+
+.qlog-dual-title {
+  font-size: 18px;
+  font-weight: 800;
   color: var(--text-bright);
+}
+
+.qlog-dual-stats {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.qlog-dual-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.qlog-dual-num {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-bright);
+  line-height: 1.1;
+}
+
+.qlog-dual-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.qlog-dual-action {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.3px;
 }
 
 /* Category toggle */

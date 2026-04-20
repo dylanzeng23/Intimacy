@@ -50,6 +50,7 @@ const strings = {
     logDayStreak: 'day streak',
     logBestStreak: 'best streak',
     logNoNut: 'no nut',
+    logSober: 'sober',
     logToday: 'today!',
 
     // Calendar
@@ -197,6 +198,7 @@ const strings = {
     logDayStreak: '天连续',
     logBestStreak: '最长连续',
     logNoNut: '禁欲',
+    logSober: '禁酒',
     logToday: '今天！',
 
     calendarTitle: '日历',

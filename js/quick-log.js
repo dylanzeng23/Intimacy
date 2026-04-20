@@ -24,21 +24,33 @@ async function computeStreaks() {
   const sexEntries = entries.filter(e => (e.category || 'sex') === 'sex');
   const drinkEntries = entries.filter(e => e.category === 'drink');
   const today = todayString(), todayDate = new Date(today + 'T00:00:00');
-  const dates = [...new Set(sexEntries.map(e => e.date))].sort();
-  let currentStreak = 0;
-  for (let i = 0; i <= dates.length; i++) {
-    const exp = new Date(todayDate); exp.setDate(exp.getDate() - i);
-    if (dates.includes(toDateString(exp))) currentStreak++; else break;
+  function calcStreak(dates) {
+    let streak = 0;
+    for (let i = 0; i <= dates.length; i++) {
+      const exp = new Date(todayDate); exp.setDate(exp.getDate() - i);
+      if (dates.includes(toDateString(exp))) streak++; else break;
+    }
+    return streak;
   }
-  let longest = dates.length > 0 ? 1 : 0, tmp = 1;
-  for (let i = 1; i < dates.length; i++) {
-    if ((new Date(dates[i]+'T00:00:00') - new Date(dates[i-1]+'T00:00:00')) / 86400000 === 1) { tmp++; longest = Math.max(longest, tmp); } else tmp = 1;
+  function calcLongest(dates) {
+    if (dates.length === 0) return 0;
+    let longest = 1, tmp = 1;
+    for (let i = 1; i < dates.length; i++) {
+      if ((new Date(dates[i]+'T00:00:00') - new Date(dates[i-1]+'T00:00:00')) / 86400000 === 1) { tmp++; longest = Math.max(longest, tmp); } else tmp = 1;
+    }
+    return longest;
   }
-  const lastSex = dates.length > 0 ? dates[dates.length - 1] : null;
-  const noNut = lastSex ? Math.floor((todayDate - new Date(lastSex + 'T00:00:00')) / 86400000) : 0;
-  const weekAgo = new Date(todayDate); weekAgo.setDate(weekAgo.getDate() - 7);
-  const drinksWeek = drinkEntries.filter(e => e.date >= toDateString(weekAgo) && e.date <= today).length;
-  return { current: currentStreak, longest, noNut, drinksWeek };
+  function calcSober(dates) {
+    if (dates.length === 0) return 0;
+    const last = new Date(dates[dates.length - 1] + 'T00:00:00');
+    return Math.floor((todayDate - last) / 86400000);
+  }
+  const sexDates = [...new Set(sexEntries.map(e => e.date))].sort();
+  const drinkDates = [...new Set(drinkEntries.map(e => e.date))].sort();
+  return {
+    sexStreak: calcStreak(sexDates), sexLongest: calcLongest(sexDates), noNut: calcSober(sexDates),
+    drinkStreak: calcStreak(drinkDates), drinkLongest: calcLongest(drinkDates), sober: calcSober(drinkDates),
+  };
 }
 
 // Selection screen — choose category first
@@ -54,25 +66,32 @@ export async function renderQuickLog(container, presetDate = null, presetCat = n
       <div class="qlog-greeting">${getLang() === 'cn' ? '记录什么？' : "What's up?"}</div>
       <div class="qlog-sub">${t('logSub')}</div>
 
-      <div class="streak-bar">
-        <div class="streak-item"><div class="streak-icon">${streaks.current > 0 ? '🔥' : '❄️'}</div><div class="streak-info"><div class="streak-count">${streaks.current}</div><div class="streak-label">${t('logDayStreak')}</div></div></div>
-        <div class="streak-divider"></div>
-        <div class="streak-item"><div class="streak-icon">🏆</div><div class="streak-info"><div class="streak-count">${streaks.longest}</div><div class="streak-label">${t('logBestStreak')}</div></div></div>
-        <div class="streak-divider"></div>
-        <div class="streak-item"><div class="streak-icon">💪</div><div class="streak-info"><div class="streak-count">${streaks.noNut}</div><div class="streak-label">${t('logNoNut')}</div></div></div>
-        <div class="streak-divider"></div>
-        <div class="streak-item"><div class="streak-icon">🍷</div><div class="streak-info"><div class="streak-count">${streaks.drinksWeek}</div><div class="streak-label">${t('statsDrinkWeek')}</div></div></div>
-      </div>
+      <div class="qlog-dual">
+        <div class="qlog-dual-card" id="pick-sex">
+          <div class="qlog-dual-header">
+            <span class="qlog-dual-emoji">🔥</span>
+            <span class="qlog-dual-title">${t('catSex')}</span>
+          </div>
+          <div class="qlog-dual-stats">
+            <div class="qlog-dual-stat"><span class="qlog-dual-num">${streaks.sexStreak}</span><span class="qlog-dual-label">${t('logDayStreak')}</span></div>
+            <div class="qlog-dual-stat"><span class="qlog-dual-num">${streaks.sexLongest}</span><span class="qlog-dual-label">${t('logBestStreak')}</span></div>
+            <div class="qlog-dual-stat"><span class="qlog-dual-num">${streaks.noNut}</span><span class="qlog-dual-label">${t('logNoNut')}</span></div>
+          </div>
+          <div class="qlog-dual-action">+ ${t('logSubmit')}</div>
+        </div>
 
-      <div class="qlog-pick">
-        <button class="qlog-pick-card" id="pick-sex">
-          <span class="qlog-pick-emoji">🔥</span>
-          <span class="qlog-pick-label">${t('catSex')}</span>
-        </button>
-        <button class="qlog-pick-card" id="pick-drink">
-          <span class="qlog-pick-emoji">🍷</span>
-          <span class="qlog-pick-label">${t('catDrink')}</span>
-        </button>
+        <div class="qlog-dual-card" id="pick-drink">
+          <div class="qlog-dual-header">
+            <span class="qlog-dual-emoji">🍷</span>
+            <span class="qlog-dual-title">${t('catDrink')}</span>
+          </div>
+          <div class="qlog-dual-stats">
+            <div class="qlog-dual-stat"><span class="qlog-dual-num">${streaks.drinkStreak}</span><span class="qlog-dual-label">${t('logDayStreak')}</span></div>
+            <div class="qlog-dual-stat"><span class="qlog-dual-num">${streaks.drinkLongest}</span><span class="qlog-dual-label">${t('logBestStreak')}</span></div>
+            <div class="qlog-dual-stat"><span class="qlog-dual-num">${streaks.sober}</span><span class="qlog-dual-label">${t('logSober')}</span></div>
+          </div>
+          <div class="qlog-dual-action">+ ${t('logSubmit')}</div>
+        </div>
       </div>
     </div>
   `;
