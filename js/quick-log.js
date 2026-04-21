@@ -66,32 +66,24 @@ export async function renderQuickLog(container, presetDate = null, presetCat = n
       <div class="qlog-greeting">${getLang() === 'cn' ? '记录什么？' : "What's up?"}</div>
       <div class="qlog-sub">${t('logSub')}</div>
 
-      <div class="qlog-dual">
-        <div class="qlog-dual-card" id="pick-sex">
-          <div class="qlog-dual-header">
-            <span class="qlog-dual-emoji">🔥</span>
-            <span class="qlog-dual-title">${t('catSex')}</span>
-          </div>
-          <div class="qlog-dual-stats">
-            <div class="qlog-dual-stat"><span class="qlog-dual-num">${streaks.sexStreak}</span><span class="qlog-dual-label">${t('logDayStreak')}</span></div>
-            <div class="qlog-dual-stat"><span class="qlog-dual-num">${streaks.sexLongest}</span><span class="qlog-dual-label">${t('logBestStreak')}</span></div>
-            <div class="qlog-dual-stat"><span class="qlog-dual-num">${streaks.noNut}</span><span class="qlog-dual-label">${t('logNoNut')}</span></div>
-          </div>
-          <div class="qlog-dual-action">+ ${t('logSubmit')}</div>
-        </div>
+      <div class="qlog-stats-grid">
+        <div class="qlog-stat-pill">🔥 <strong>${streaks.sexStreak}</strong> ${t('logDayStreak')}</div>
+        <div class="qlog-stat-pill">🏆 <strong>${streaks.sexLongest}</strong> ${t('logBestStreak')}</div>
+        <div class="qlog-stat-pill">💪 <strong>${streaks.noNut}</strong> ${t('logNoNut')}</div>
+        <div class="qlog-stat-pill">🍷 <strong>${streaks.drinkStreak}</strong> ${t('logDayStreak')}</div>
+        <div class="qlog-stat-pill">🏅 <strong>${streaks.drinkLongest}</strong> ${t('logBestStreak')}</div>
+        <div class="qlog-stat-pill">🧘 <strong>${streaks.sober}</strong> ${t('logSober')}</div>
+      </div>
 
-        <div class="qlog-dual-card" id="pick-drink">
-          <div class="qlog-dual-header">
-            <span class="qlog-dual-emoji">🍷</span>
-            <span class="qlog-dual-title">${t('catDrink')}</span>
-          </div>
-          <div class="qlog-dual-stats">
-            <div class="qlog-dual-stat"><span class="qlog-dual-num">${streaks.drinkStreak}</span><span class="qlog-dual-label">${t('logDayStreak')}</span></div>
-            <div class="qlog-dual-stat"><span class="qlog-dual-num">${streaks.drinkLongest}</span><span class="qlog-dual-label">${t('logBestStreak')}</span></div>
-            <div class="qlog-dual-stat"><span class="qlog-dual-num">${streaks.sober}</span><span class="qlog-dual-label">${t('logSober')}</span></div>
-          </div>
-          <div class="qlog-dual-action">+ ${t('logSubmit')}</div>
-        </div>
+      <div class="qlog-pick">
+        <button class="qlog-pick-card" id="pick-sex">
+          <span class="qlog-pick-emoji">🔥</span>
+          <span class="qlog-pick-label">${t('catSex')}</span>
+        </button>
+        <button class="qlog-pick-card" id="pick-drink">
+          <span class="qlog-pick-emoji">🍷</span>
+          <span class="qlog-pick-label">${t('catDrink')}</span>
+        </button>
       </div>
     </div>
   `;
